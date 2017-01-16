@@ -63,6 +63,15 @@ router.route('/chores').post(function(req, res) {
     });
 });
 
+router.route('/chores').get(function(req, res) {
+    Chore.find(function(err, chores) {
+      if (err)
+        res.send(err);
+
+        res.json(chores);
+    });
+});
+
 app.use('/api', router);
 
 // Start
