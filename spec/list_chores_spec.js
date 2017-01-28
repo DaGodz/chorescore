@@ -7,15 +7,8 @@ frisby.create('List chores')
   .expectStatus(200)
   .expectHeaderContains("content-type", "application/json")
   .expectJSONTypes('*', {
-    name: String
-  })
-.toss();
-
-frisby.create('Add chore')
-  .post(baseURL, {"name": "test-chore"})
-  .expectStatus(200)
-  .expectHeaderContains("content-type", "application/json")
-  .expectJSON({
-    message: "Chore created!"
+    name: String,
+    who: String,
+    when: Number
   })
 .toss();
