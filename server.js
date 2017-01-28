@@ -4,7 +4,7 @@ var app = express();
 var bodyParser = require('body-parser');
 var mongoose = require('mongoose');
 
-mongoose.connect('mongodb://dave:dave@ds151208.mlab.com:51208/chorescore', function(err) {
+mongoose.connect('mongodb://chorescore:tA86#Xt8X5h6Nicnz%0e@ds151208.mlab.com:51208/chorescore', function(err) {
     if (err) throw err;
 });
 
