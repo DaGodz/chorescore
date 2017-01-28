@@ -41,23 +41,21 @@ router.use(function(req, res, next) {
 
     // log something
     console.log('Received: ' + req.method + ': ' + req.url);
-
+  
     next(); // make sure we go to the next route, not just stop here
-});
-
-router.get('/', function(req, res) {
-    res.json({
-        message: 'hooray! welcome to our api!'
-    });
 });
 
 router.route('/chores').post(function(req, res) {
     var chore = new Chore();
     chore.name = req.body.name;
+    chore.who = req.body.who;
+    chore.when = req.body.when;
 
     chore.save(function(err) {
-        if (err)
+        if (err) {
             res.send(err);
+            return;
+        }
 
         res.json({
             message: 'Chore created!'
@@ -67,15 +65,16 @@ router.route('/chores').post(function(req, res) {
 
 router.route('/chores').get(function(req, res) {
     Chore.find(function(err, chores) {
-      if (err)
-        res.send(err);
+        if (err) {
+            res.send(err);
+            return;
+        }
 
         res.json(chores);
     });
 });
 
-app.use('/api', router);
-
 // Start
+app.use('/api', router);
 app.listen(port);
-console.log('Magic happens on port ' + port);
+console.log('Listening on port ' + port);
