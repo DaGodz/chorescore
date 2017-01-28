@@ -1,10 +1,6 @@
-// This spec will test whether we successfully return a list of chores
-
 var frisby = require('frisby');
 
-// no idea how to dynamically acquire the URL, so having to hardcode for now
-var baseURL = "https://chorescore-pljhll.c9users.io/api/chores";
-
+var baseURL = "https://chorescore-pljhll.c9users.io/api/chores"; // see issue #15
 
 frisby.create('List chores')
   .get(baseURL)
