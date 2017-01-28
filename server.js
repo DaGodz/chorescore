@@ -38,6 +38,7 @@ var router = express.Router();
 // Middleware
 router.use(function(req, res, next) {
     // log something
+    console.log('Received: ' + req.method + ': ' + req.url);
     next(); // make sure we go to the next route, not just stop here
 });
 
