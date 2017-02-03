@@ -4,6 +4,11 @@ var app = express();
 var bodyParser = require('body-parser');
 var mongoose = require('mongoose');
 
+var Chore = require('./app/models/chore');
+var User = require('./app/models/user');
+
+var port = process.env.PORT;
+
 mongoose.connect('mongodb://chorescore:tA86#Xt8X5h6Nicnz%0e@ds151208.mlab.com:51208/chorescore', function(err) {
     if (err) throw err;
 });
@@ -29,9 +34,6 @@ app.use(bodyParser.urlencoded({
 }));
 app.use(bodyParser.json());
 
-var port = process.env.PORT;
-var Chore = require('./app/models/chore');
-
 // Routing
 var router = express.Router();
 
@@ -41,7 +43,7 @@ router.use(function(req, res, next) {
 
     // log something
     console.log('Received: ' + req.method + ': ' + req.url);
-  
+
     next(); // make sure we go to the next route, not just stop here
 });
 
