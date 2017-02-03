@@ -1,10 +1,11 @@
 // Base
+var config = require('./config.js');
+
 var express = require('express');
-var app = express();
 var bodyParser = require('body-parser');
 var mongoose = require('mongoose');
 
-mongoose.connect('mongodb://chorescore:tA86#Xt8X5h6Nicnz%0e@ds151208.mlab.com:51208/chorescore', function(err) {
+mongoose.connect(config.database, function(err) {
     if (err) throw err;
 });
 
@@ -24,6 +25,7 @@ mongoose.connection.on('error', function (err) {
     console.log('Error connecting to mongo server. ' + err);
 });
 
+var app = express();
 app.use(bodyParser.urlencoded({
     extended: true
 }));
@@ -41,7 +43,7 @@ router.use(function(req, res, next) {
 
     // log something
     console.log('Received: ' + req.method + ': ' + req.url);
-  
+
     next(); // make sure we go to the next route, not just stop here
 });
 
