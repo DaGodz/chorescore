@@ -76,6 +76,21 @@ router.route('/chores').get(function(req, res) {
     });
 });
 
+router.route('/users').post(function(req, res) {
+    var user = new User();
+    user.username = req.body.username;
+    user.password = req.body.password;
+
+    user.save(function(err) {
+        if (err) {
+            res.send(err);
+            return;
+        }
+
+        res.json( { success: 'true' } );
+    });
+});
+
 // Start
 app.use('/api', router);
 app.listen(port);
