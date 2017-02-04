@@ -3,6 +3,7 @@ var express = require('express');
 var app = express();
 var bodyParser = require('body-parser');
 var mongoose = require('mongoose');
+var jwt = require('jsonwebtoken');
 
 var Chore = require('./app/models/chore');
 var User = require('./app/models/user');
@@ -88,6 +89,36 @@ router.route('/users').post(function(req, res) {
         }
 
         res.json( { success: 'true' } );
+    });
+});
+
+router.route('/authenticate').post(function(req, res) {
+    User.findOne({
+       username: req.body.username
+    }, function(err, user) {
+        if (err) throw err;
+
+        if (!user) {
+            res.json({ success: false, message: 'Authentication failed. User not found.' });
+        } else if (user) {
+            user.comparePassword(req.body.password, function(err, isMatch) {
+                if (err) throw err;
+
+                if (!isMatch) {
+                    res.json({ success: false, message: 'Authentication failed. Password Incorrect.'});
+                } else if (isMatch) {
+                    var token = jwt.sign(user, 'tempsecretkey', {
+                        expiresIn: 1440*60
+                    });
+
+                    res.json({
+                        success: true,
+                        message: "Token issued successfully.",
+                        token: token
+                    });
+                }
+            });
+        }
     });
 });
 
