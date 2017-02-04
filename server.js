@@ -1,11 +1,10 @@
-// Base
-var config = require('./config.js');
+require('dotenv').config();
 
 var express = require('express');
 var bodyParser = require('body-parser');
 var mongoose = require('mongoose');
 
-mongoose.connect(config.database, function(err) {
+mongoose.connect(process.env.MONGODB, function(err) {
     if (err) throw err;
 });
 
