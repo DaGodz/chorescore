@@ -3,6 +3,12 @@ require('dotenv').config();
 var express = require('express');
 var bodyParser = require('body-parser');
 var mongoose = require('mongoose');
+var jwt = require('jsonwebtoken');
+
+var Chore = require('./app/models/chore');
+var User = require('./app/models/user');
+
+var port = process.env.PORT;
 
 mongoose.connect(process.env.MONGODB, function(err) {
     if (err) throw err;
@@ -30,9 +36,6 @@ app.use(bodyParser.urlencoded({
 }));
 app.use(bodyParser.json());
 
-var port = process.env.PORT;
-var Chore = require('./app/models/chore');
-
 // Routing
 var router = express.Router();
 
@@ -58,9 +61,7 @@ router.route('/chores').post(function(req, res) {
             return;
         }
 
-        res.json({
-            message: 'Chore created!'
-        });
+        res.json( { success: 'true' } );
     });
 });
 
@@ -72,6 +73,51 @@ router.route('/chores').get(function(req, res) {
         }
 
         res.json(chores);
+    });
+});
+
+router.route('/users').post(function(req, res) {
+    var user = new User();
+    user.username = req.body.username;
+    user.password = req.body.password;
+
+    user.save(function(err) {
+        if (err) {
+            res.send(err);
+            return;
+        }
+
+        res.json( { success: 'true' } );
+    });
+});
+
+router.route('/authenticate').post(function(req, res) {
+    User.findOne({
+       username: req.body.username
+    }, function(err, user) {
+        if (err) throw err;
+
+        if (!user) {
+            res.json({ success: false, message: 'Authentication failed. User not found.' });
+        } else if (user) {
+            user.comparePassword(req.body.password, function(err, isMatch) {
+                if (err) throw err;
+
+                if (!isMatch) {
+                    res.json({ success: false, message: 'Authentication failed. Password Incorrect.'});
+                } else if (isMatch) {
+                    var token = jwt.sign(user, 'tempsecretkey', {
+                        expiresIn: 1440*60
+                    });
+
+                    res.json({
+                        success: true,
+                        message: "Token issued successfully.",
+                        token: token
+                    });
+                }
+            });
+        }
     });
 });
 
