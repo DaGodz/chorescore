@@ -61,9 +61,7 @@ router.route('/chores').post(function(req, res) {
             return;
         }
 
-        res.json({
-            message: 'Chore created!'
-        });
+        res.json( { success: 'true' } );
     });
 });
 

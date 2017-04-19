@@ -11,7 +11,5 @@ frisby.create('Add chore')
   .inspectJSON()
   .expectStatus(200)
   .expectHeaderContains("content-type", "application/json")
-  .expectJSON({
-    message: "Chore created!"
-  })
+  .expectJSON({ success: 'true' })
 .toss();
