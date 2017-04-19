@@ -1,6 +1,6 @@
-// Base
+require('dotenv').config();
+
 var express = require('express');
-var app = express();
 var bodyParser = require('body-parser');
 var mongoose = require('mongoose');
 var jwt = require('jsonwebtoken');
@@ -10,7 +10,7 @@ var User = require('./app/models/user');
 
 var port = process.env.PORT;
 
-mongoose.connect('mongodb://chorescore:tA86#Xt8X5h6Nicnz%0e@ds151208.mlab.com:51208/chorescore', function(err) {
+mongoose.connect(process.env.MONGODB, function(err) {
     if (err) throw err;
 });
 
@@ -30,6 +30,7 @@ mongoose.connection.on('error', function (err) {
     console.log('Error connecting to mongo server. ' + err);
 });
 
+var app = express();
 app.use(bodyParser.urlencoded({
     extended: true
 }));
